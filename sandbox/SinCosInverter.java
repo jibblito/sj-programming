@@ -1,12 +1,20 @@
-public class HelloWorld {
-	public static void main(String[] args) {
-		String test = "cos(x+1)";
-		Equation eq = new Equation(test);
-		System.out.println("Input: "+ test);
-		System.out.print("Result: ");
-		eq.printEqn();
-		Equation eq2=  eq.getInverse();
-		eq2.printEqn();
+import java.util.Scanner;
+
+public class SinCosInverter {
+	
+	static String version = "1.0";
+
+	public static void main(String[] args) 	{
+		String input;
+		Scanner scan = new Scanner(System.in);
+		System.out.println("SIN/COS INVERTER VERSION " + version + " BY RORY HIBBLER");
+		System.out.println("Enter sin/cos equation in format Asin:cosB(x-C)+D: ");
+		input = scan.nextLine();
+		
+		Equation eq = new Equation(input);
+		Equation eqInv = eq.getInverse();
+		System.out.println("Input: "+ eq.getParsedEq());
+		System.out.print("Result after inversion: " + eqInv.getParsedEq());
 		}
 }
 
@@ -71,20 +79,19 @@ class Equation {
 		else s+="sin";
 		s+="+"+stre+"(x";
 		if(xS<=0) s+="+";
-		s+=-1*xS + ")";
-		if(yS<=0) s+="+";
+		if(xS==0) s+=xS+")";
+		else s+=-1*xS + ")";
+		if(yS>=0) s+="+";
 		s+=yS;
 		return s;
 	}
 
-	public void printEqn() {
-		System.out.println(parsedEq);
+	public String getParsedEq() {
+		return parsedEq;
 	}
 	
 	public Equation getInverse() {
-		Float period = 6.28319f/stretch;
-		Float newShift = xShift;
-		Float deltaPeriod = period * 0.5f;
+		Float deltaPeriod = 3.14f/(2.0f*stretch);
 		if(identity) {
 			String newEq = buildEquation(false,amplitude,stretch,xShift-deltaPeriod,yShift);
 			return new Equation(newEq);
