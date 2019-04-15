@@ -1,5 +1,6 @@
 import java.util.Scanner;
 import java.awt.Point;
+import java.awt.Graphics;
 
 public class Interpolation {
 	
@@ -61,6 +62,16 @@ class Triangle {
 		System.out.println("C: " + pairs[2].getPoint().y + " " + pairs[2].getVal());
 	}
 
+	public void generateLines() {
+		Line ac = new Line(pairs[0].getPoint(),pairs[2].getPoint());
+		Line ab = new Line(pairs[0].getPoint(),pairs[1].getPoint());
+		line bc = new Line(pairs[1].getPoint(),pairs[2].getPoint());
+	}
+
+	public void drawPoint(Pair pair, Float val,Graphics g) {
+		Point p = pair.getPoint();
+		g.drawLine(p.x,p.y,p.x,p.y);
+	}	
 
 }
 
@@ -85,4 +96,35 @@ class Pair {
 	}
 }
 
+class Line {
+	
+	Point a;
+	Point b;
+	float slope;
+	int intercept;
 
+	public Line(Point a, Point b) {
+		this.a = a;
+		this.b = b;
+		this.generateEquation();
+	}
+
+	void generateEquation() {
+		try {slope = (Float)(a.y-b.y)/(Float)(a.x-b.x);
+		} catch
+		intercept = a.y-(int)(slope*(Float)a.x);	
+	}
+
+	public String getEquation() {
+		return "y=" +slope+ "x+" +intercept;
+	}
+	
+	public int getX(int y) {
+		return (int)((float)(y-intercept)/slope);
+	}
+
+	public int getY(int x) {
+		return(int)(slope*(float)x)+intercept;
+	}
+	
+}
