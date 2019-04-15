@@ -19,10 +19,16 @@ public class Interpolation {
 		float cv = scan.nextFloat();
 		System.out.println();
 
-		Triangle tr = new Triangle(new Pair(new Point(ax,ay),av),new Pair(new Point(bx,by),bv),new Pair(new Point(cx,cy),cv));
-		tr.catString();
-		tr.sortPoints(0);
-		tr.catString();
+		FloatPoint a = new FloatPoint(ax,ay);
+		FloatPoint b = new FloatPoint(bx,by);
+		FloatPoint c = new FloatPoint(cx,cy);
+
+		Triangle tr = new Triangle(new Pair(a,av),new Pair(b,bv),new Pair(c,cv));
+
+		System.out.println();
+		System.out.println("New section");
+		Line lnAC = new Line(a,c);
+		System.out.println(lnAC.getEquation());
 	}	
 	
 }
@@ -37,11 +43,12 @@ class Triangle {
 	public Triangle(Pair a, Pair b, Pair c) {
 		this.a = a; this.b = b; this.c = c;
 		pairs = new Pair[]{this.a,this.b,this.c};
+		this.sortPoints(0);
 	}
 
 	public void sortPoints(int start) {
 		if (start == 2) return;
-		Pair max = new Pair(new Point(0,0),0.0f);
+		Pair max = new Pair(new FloatPoint(0,0),0.0f);
 		int maxInd = 0;
 		for(int i = start; i < pairs.length; i++) {
 			if(pairs[i].getPoint().y > max.getPoint().y) {
@@ -65,29 +72,29 @@ class Triangle {
 	public void generateLines() {
 		Line ac = new Line(pairs[0].getPoint(),pairs[2].getPoint());
 		Line ab = new Line(pairs[0].getPoint(),pairs[1].getPoint());
-		line bc = new Line(pairs[1].getPoint(),pairs[2].getPoint());
+		Line bc = new Line(pairs[1].getPoint(),pairs[2].getPoint());
 	}
 
 	public void drawPoint(Pair pair, Float val,Graphics g) {
-		Point p = pair.getPoint();
-		g.drawLine(p.x,p.y,p.x,p.y);
+		FloatPoint p = pair.getPoint();
+		g.drawLine((int)p.x,(int)p.y,(int)p.x,(int)p.y);
 	}	
 
 }
 
 class Pair {
-	private Point p;
+	private FloatPoint p;
 	private float val;	
 
-	public Pair(Point p, Float val) {
+	public Pair(FloatPoint p, Float val) {
 		this.p = p;
 		this.val = val;
 	}
 
-	public Point getPoint() {
+	public FloatPoint getPoint() {
 		return p;
 	}
-	public void setPoint(Point p) {
+	public void setPoint(FloatPoint p) {
 		this.p = p;
 	}
 
@@ -98,21 +105,22 @@ class Pair {
 
 class Line {
 	
-	Point a;
-	Point b;
+	FloatPoint a;
+	FloatPoint b;
 	float slope;
 	int intercept;
 
-	public Line(Point a, Point b) {
+	public Line(FloatPoint a, FloatPoint b) {
 		this.a = a;
 		this.b = b;
 		this.generateEquation();
 	}
 
+
 	void generateEquation() {
-		try {slope = (Float)(a.y-b.y)/(Float)(a.x-b.x);
-		} catch
-		intercept = a.y-(int)(slope*(Float)a.x);	
+		try { slope = (a.y-b.y)/(a.x-b.x);
+		} catch (ArithmeticException ae) { System.out.println("Errar!"); }
+		intercept = (int)(a.y-slope*a.x);	
 	}
 
 	public String getEquation() {
@@ -124,7 +132,23 @@ class Line {
 	}
 
 	public int getY(int x) {
-		return(int)(slope*(float)x)+intercept;
+		return (int)(slope*(float)x)+intercept;
 	}
 	
+}
+
+class FloatPoint {
+	
+	public float x, y;
+
+	public FloatPoint(float x, float y) {
+		this.x = x;
+		this.y = y;
+	}
+
+	public FloatPoint(int x, int y) {
+		this.x = (float)x;
+		this.y = (float)y;
+	}
+
 }
