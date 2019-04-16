@@ -27,17 +27,16 @@ public class Interpolation {
 
 		System.out.println();
 		System.out.println("New section");
-		Line lnAC = new Line(a,c);
-		System.out.println(lnAC.getEquation());
+		Line linAC = new Line(a,c);
+		System.out.println(linAC.getEquation());
 	}	
 	
 }
 
 class Triangle {
 	
-	private Pair a;
-	private Pair b;
-	private Pair c;
+	private Pair a, b, c;
+	private Line linAB, linBC, linAC;
 	private Pair[] pairs = new Pair[3];
 
 	public Triangle(Pair a, Pair b, Pair c) {
@@ -70,15 +69,19 @@ class Triangle {
 	}
 
 	public void generateLines() {
-		Line ac = new Line(pairs[0].getPoint(),pairs[2].getPoint());
-		Line ab = new Line(pairs[0].getPoint(),pairs[1].getPoint());
-		Line bc = new Line(pairs[1].getPoint(),pairs[2].getPoint());
+		linAB = new Line(pairs[0].getPoint(),pairs[1].getPoint());
+		linBC = new Line(pairs[1].getPoint(),pairs[2].getPoint());
+		linAC = new Line(pairs[0].getPoint(),pairs[2].getPoint());
 	}
 
 	public void drawPoint(Pair pair, Float val,Graphics g) {
 		FloatPoint p = pair.getPoint();
 		g.drawLine((int)p.x,(int)p.y,(int)p.x,(int)p.y);
-	}	
+	}
+
+	public Line[] getLines() {
+		return new Line[]{linAB,linBC,linAC};
+	}
 
 }
 
