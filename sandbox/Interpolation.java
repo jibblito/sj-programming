@@ -8,6 +8,7 @@ public class Interpolation {
 	
 		Scanner scan = new Scanner(System.in);
 		System.out.println("Enter Points:");
+
 		int ax = scan.nextInt();
 		int ay = scan.nextInt();
 		float av = scan.nextFloat();
@@ -17,6 +18,7 @@ public class Interpolation {
 		int cx = scan.nextInt();
 		int cy = scan.nextInt();
 		float cv = scan.nextFloat();
+
 		System.out.println();
 
 		FloatPoint a = new FloatPoint(ax,ay);
@@ -27,7 +29,11 @@ public class Interpolation {
 
 		System.out.println();
 		System.out.println("New section");
+		Line linAB = new Line(a,b);
+		Line linBC = new Line(b,c);
 		Line linAC = new Line(a,c);
+		System.out.println(linAB.getEquation());
+		System.out.println(linBC.getEquation());
 		System.out.println(linAC.getEquation());
 	}	
 	
@@ -43,6 +49,7 @@ class Triangle {
 		this.a = a; this.b = b; this.c = c;
 		pairs = new Pair[]{this.a,this.b,this.c};
 		this.sortPoints(0);
+		this.generateLines();
 	}
 
 	public void sortPoints(int start) {
@@ -62,10 +69,8 @@ class Triangle {
 		sortPoints(start + 1);
 	}
 
-	public void catString() {
-		System.out.println("A: " + pairs[0].getPoint().y + " " +pairs[0].getVal());
-		System.out.println("B: " + pairs[1].getPoint().y + " " + pairs[1].getVal());
-		System.out.println("C: " + pairs[2].getPoint().y + " " + pairs[2].getVal());
+	public String catString() {
+		return "A: " + pairs[0].getPoint().y + " " +pairs[0].getVal() + "\nB: " + pairs[1].getPoint().y + " " + pairs[1].getVal() + "\nC: " + pairs[2].getPoint().y + " " + pairs[2].getVal();
 	}
 
 	public void generateLines() {
@@ -104,6 +109,11 @@ class Pair {
 	public Float getVal() {
 		return val;
 	}
+
+	public void drawPoint(Graphics g) {
+		g.drawLine((int)p.x,(int)p.y,(int)p.x,(int)p.y);
+	}
+
 }
 
 class Line {
