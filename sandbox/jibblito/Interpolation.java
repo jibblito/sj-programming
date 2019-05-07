@@ -25,16 +25,20 @@ public class Interpolation {
 		FloatPoint b = new FloatPoint(bx,by);
 		FloatPoint c = new FloatPoint(cx,cy);
 
-		Triangle tr = new Triangle(new Pair(a,av),new Pair(b,bv),new Pair(c,cv));
-
-		System.out.println();
-		System.out.println("New section");
+		System.out.println("\nSection 1: Input-based");
 		Line linAB = new Line(a,b);
 		Line linBC = new Line(b,c);
 		Line linAC = new Line(a,c);
 		System.out.println(linAB.getEquation());
 		System.out.println(linBC.getEquation());
 		System.out.println(linAC.getEquation());
+
+		System.out.println("\nSection 2: Triangle Object");
+		Triangle tr = new Triangle(new Pair(a,av),new Pair(b,bv),new Pair(c,cv));
+		System.out.println(tr.catString());
+		tr.sortPoints(0);
+		System.out.println(tr.catString());
+		
 	}	
 	
 }
@@ -48,7 +52,6 @@ class Triangle {
 	public Triangle(Pair a, Pair b, Pair c) {
 		this.a = a; this.b = b; this.c = c;
 		pairs = new Pair[]{this.a,this.b,this.c};
-		this.sortPoints(0);
 		this.generateLines();
 	}
 
@@ -57,7 +60,7 @@ class Triangle {
 		Pair max = new Pair(new FloatPoint(0,0),0.0f);
 		int maxInd = 0;
 		for(int i = start; i < pairs.length; i++) {
-			if(pairs[i].getPoint().y > max.getPoint().y) {
+			if(pairs[i].getPoint().y >= max.getPoint().y) {
 				max = pairs[i];
 				maxInd = i;
 			}
@@ -67,11 +70,14 @@ class Triangle {
 		pairs[start] = max;
 		pairs[maxInd] = temp;
 		sortPoints(start + 1);
+		generateLines();
 	}
 
 	public String catString() {
-		return "A: " + pairs[0].getPoint().y + " " +pairs[0].getVal() + "\nB: " + pairs[1].getPoint().y + " " + pairs[1].getVal() + "\nC: " + pairs[2].getPoint().y + " " + pairs[2].getVal();
-	}
+		String ret = "A: " +pairs[0].catPair()+"\nB: " +pairs[1].catPair()+ "\nC: " +pairs[2].catPair();
+		ret += "\nAB: " +linAB.getEquation()+ "\nBC: " +linBC.getEquation()+ "\nAC: " +linAC.getEquation();
+		return ret;
+	
 
 	public void generateLines() {
 		linAB = new Line(pairs[0].getPoint(),pairs[1].getPoint());
@@ -112,6 +118,10 @@ class Pair {
 
 	public void drawPoint(Graphics g) {
 		g.drawLine((int)p.x,(int)p.y,(int)p.x,(int)p.y);
+	}
+
+	public String catPair() {
+		return "x: "+p.x+" y: "+p.y+" val: "+val;
 	}
 
 }
