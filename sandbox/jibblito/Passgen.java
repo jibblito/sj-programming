@@ -1,7 +1,7 @@
 import java.util.Scanner;
 import java.util.Random;
 
-public class primo {
+public class Passgen {
 		
 	static String version = "1.0";	
 
